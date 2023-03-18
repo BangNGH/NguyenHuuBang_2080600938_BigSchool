@@ -24,8 +24,9 @@ namespace NguyenHuuBang_2080600938.Controllers
             };
             return View(viewModel);
         }
-
+        [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(CourseViewModel viewModel)
         {
             if (!ModelState.IsValid)

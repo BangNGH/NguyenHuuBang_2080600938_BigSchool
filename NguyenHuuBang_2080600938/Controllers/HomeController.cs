@@ -1,16 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NguyenHuuBang_2080600938.Models;
+using System;
+using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace NguyenHuuBang_2080600938.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext _dbContext;
+        public HomeController()
+        {
+            _dbContext = new ApplicationDbContext();
+        }
         public ActionResult Index()
         {
-            return View();
+            var upComingCourses = _dbContext.Course
+                .Include(x => x.Leturer)
+                .Include(x => x.category)
+                .Where(x => x.DateTime > DateTime.Now);
+            return View(upComingCourses);
         }
 
         public ActionResult About()
