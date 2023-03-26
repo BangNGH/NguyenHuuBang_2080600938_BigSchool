@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,6 +14,8 @@ namespace NguyenHuuBang_2080600938.Models
         [Required]
         [StringLength(255)]
         public string Name { get; set; }
+        public ICollection<Following> Followers { get; set; }
+        public ICollection<Following> Followees { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -19,6 +23,11 @@ namespace NguyenHuuBang_2080600938.Models
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
+        }
+        public ApplicationUser()
+        {
+            Followers = new Collection<Following>();
+            Followees = new Collection<Following>();
         }
     }
 

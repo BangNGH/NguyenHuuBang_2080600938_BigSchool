@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using NguyenHuuBang_2080600938.Models;
 using NguyenHuuBang_2080600938.ViewModels;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -44,6 +45,23 @@ namespace NguyenHuuBang_2080600938.Controllers
             _dbContext.Course.Add(course);
             _dbContext.SaveChanges();
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public ActionResult Attending()
+        {
+            var userId = User.Identity.GetUserId();
+            var courses = _dbContext.Attendances
+                .Where(a => a.AttendeeId == userId)
+                .Select(a => a.Course)
+                .Include(l => l.Leturer)
+                .Include(l => l.category).ToList();
+            var viewModel = new CourseViewModel
+            {
+                UpcommingCourses = courses,
+                ShowAction = User.Identity.IsAuthenticated
+            };
+            return View(viewModel);
         }
 
     }

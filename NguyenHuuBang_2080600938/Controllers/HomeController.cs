@@ -1,4 +1,5 @@
 ﻿using NguyenHuuBang_2080600938.Models;
+using NguyenHuuBang_2080600938.ViewModels;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -19,13 +20,19 @@ namespace NguyenHuuBang_2080600938.Controllers
                 .Include(x => x.Leturer)
                 .Include(x => x.category)
                 .Where(x => x.DateTime > DateTime.Now);
-            return View(upComingCourses);
+
+            var viewModel = new CourseViewModel
+            {
+                UpcommingCourses = upComingCourses,
+                ShowAction = User.Identity.IsAuthenticated
+            };
+            return View(viewModel);
+
         }
 
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
