@@ -7,11 +7,11 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@User.Identity.GetUserName() <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@User.Identity.Name<span class="caret"></span></a>
             <ul class="dropdown-menu">
-                
+                <li><a href="@Url.Action("MineCourse", "Courses")">My Upcomming Course</a></li>
                 <li><a href="@Url.Action("Attending", "Courses")">Course I'm going'</a></li>
-                <li><a href="#">Lecture I'm following'</a></li>
+                <li><a href="@Url.Action("LecturerFollowing", "Courses")">Lecture I'm following'</a></li>
                 <li><a role="separator" class="divider"></a></li>
                 <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
             </ul>

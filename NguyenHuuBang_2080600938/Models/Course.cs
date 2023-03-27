@@ -18,5 +18,6 @@ namespace NguyenHuuBang_2080600938.Models
         [Required]
         public byte CategoryId { get; set; }
 
+        public bool IsCanceled { get; set; }
     }
 }

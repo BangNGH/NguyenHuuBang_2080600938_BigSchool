@@ -1,7 +1,4 @@
-﻿
-
-@model NguyenHuuBang_2080600938.ViewModels.CourseViewModel
-
+﻿@model NguyenHuuBang_2080600938.ViewModels.CourseViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,13 +21,28 @@
                     @course.Leturer.Name
                     @if (Model.ShowAction)
                     {
-                        <button data-user-id="@course.LeturerId" class="btn btn-default btn-sm js-toggle-follow">Follow</button>
+                        if ((Model.lecturersFollowed ?? new List<string>()).Contains(@course.LeturerId))
+                        {
+                            <button data-user-id="@course.LeturerId" class="btn btn-default btn-sm js-toggle-follow followed">Unfollow</button>
+                        }
+                        else
+                        {
+                            <button data-user-id="@course.LeturerId" class="btn btn-default btn-sm js-toggle-follow">Follow</button>
+                        }
                     }
                 </span>
                 <span class="category">@course.category.Name</span>
                 @if (Model.ShowAction)
                 {
-                    <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toggle-attendance">Going?</button>
+                    
+                    if ((Model.AttendanceCourses ?? new List<int>()).Contains(@course.Id))
+                    {
+                        <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toggle-attendance followed">Cancel</button>
+                    }
+                    else
+                    {
+                        <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toggle-attendance">Going?</button>
+                    }
                 }
 
             </div>
@@ -42,37 +54,73 @@
         $(document).ready(function () {
             $(".js-toggle-attendance").click(function (e) {
                 var button = $(e.target);
-                $.post("/api/Attendances", { courseId: button.attr("data-course-id") })
-                    .done(function () {
-                        button
-                            .removeClass("btn-default")
-                            .addClass("btn-info")
-                            .text("Going");
+                if (button.hasClass("followed")) {
+                   // Cancel Course
+                    $.ajax({
+                        url: "/api/Attendances/CancelCourse?courseId=" + button.attr("data-course-id"),
+                        method: "DELETE"
                     })
-                    .fail(function () {
-                        alert("Something wrong when attendance!");
-                    });
+                        .done(function () {
+                            button.text("Going");
+                            button.removeClass("followed");
+                        })
+                        .fail(function () {
+                            alert("Something went wrong when cancel course!");
+                        });
+                } else {
+                    // Going
+                    $.post("/api/attendances", { courseId: button.attr("data-course-id") })
+                        .done(function () {
+                            button
+                                .removeClass("btn-default")
+                                .addClass("followed")
+                                .text("Cancel");
+                        })
+                        .fail(function () {
+                            alert("Something wrong when attendance!");
+
+                        });
+                }
             });
+
             $(".js-toggle-follow").click(function (e) {
                 var button = $(e.target);
-                $.post("/api/followings", { followeeId: button.attr("data-user-id") })
-                    .done(function () {
-                        button.text("Following");
+                if (button.hasClass("followed")) {
+                    // Unfollow
+                    $.ajax({
+                        url: "/api/followings/" + button.attr("data-user-id"),
+                        method: "DELETE"
                     })
-                    .fail(function () {
-                        alert("Something wrong when follow!");
-                    });
+                        .done(function () {
+                            button.text("Follow");
+                            button.removeClass("followed");
+                        })
+                        .fail(function () {
+                            alert("Something went wrong when unfollowing!");
+                        });
+                } else {
+                    // Follow
+                    $.post("/api/followings", { followeeId: button.attr("data-user-id") })
+                        .done(function () {
+                            button.text("Unfollow");
+                            button.addClass("followed");
+                        })
+                        .fail(function () {
+                            alert("Something went wrong when following!");
+                        });
+                }
             });
+
+
+            ///////////////////
         });
-
-
-
-
     </script>
-
 }
-
-
-
+<style>
+    .followed {
+        background-color: #454564;
+        color: white;
+    }
+</style>
 
 

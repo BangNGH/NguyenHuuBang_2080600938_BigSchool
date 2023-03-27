@@ -7,7 +7,11 @@ namespace NguyenHuuBang_2080600938.ViewModels
 {
     public class CourseViewModel
     {
+        public int Id { get; set; }
         public IEnumerable<Course> UpcommingCourses { get; set; }
+        public List<int> AttendanceCourses { get; set; }
+        public List<string> lecturersFollowed { get; set; }
+
         public bool ShowAction { get; set; }
         [Required]
         public string Place { get; set; }
@@ -24,6 +28,11 @@ namespace NguyenHuuBang_2080600938.ViewModels
         public DateTime GetDateTime()
         {
             return DateTime.Parse(string.Format("{0} {1}", Date, Time));
+        }
+        public string Heading { get; set; }
+        public string Action
+        {
+            get { return (Id != 0) ? "Update" : "Create"; }
         }
     }
 }

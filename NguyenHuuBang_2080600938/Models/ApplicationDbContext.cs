@@ -33,8 +33,6 @@ namespace NguyenHuuBang_2080600938.Models
                 .WithRequired(u => u.Follower)
                 .WillCascadeOnDelete(false);
             base.OnModelCreating(modelBuilder);
-
-
         }
     }
 }

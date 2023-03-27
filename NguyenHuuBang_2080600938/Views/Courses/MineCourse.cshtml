@@ -1,0 +1,66 @@
+﻿@model IEnumerable<NguyenHuuBang_2080600938.Models.Course>
+@{
+    ViewBag.Title = "MineCourse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>My Course</h2>
+
+<ul class="course">
+    @foreach (var course in Model)
+    {
+        <li>
+            <div class="date">
+                <div class="month">
+                    @course.DateTime.ToString("MM")
+                </div>
+                <div class="day">
+                    @course.DateTime.ToString("dd")
+                </div>
+            </div>
+            <div class="details">
+                <span class="lecturer">
+                    @course.Leturer.Name
+                </span>
+                <br />
+                <span class="category">@course.category.Name</span>
+            </div>
+            <div class="action">
+                <a href="@Url.Action("EnableCourse", "Courses", new {id = course.Id})">Start</a> |
+                <a href="@Url.Action("Edit", "Courses", new {id = course.Id})">Edit</a> |
+                <a href="#" class="js-cancel-course" data-course-id="@course.Id">Unable</a>
+            </div>
+        </li>
+    }
+</ul>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(".js-cancel-course").click(function (e) {
+                e.preventDefault();
+                var link = $(e.target);
+                bootbox.confirm("Are you sure to cancel this course?", function () {
+                    $.ajax({
+                        url: "/api/Courses/Cancel?Id=" + link.attr("data-course-id"),
+                        method: "DELETE"
+                    })
+                        .done(function () {
+                            link.closest("li").fadeOut(function () {
+                                $(this).remove();
+
+                            });
+                        })
+                        .fail(function () {
+                            alert("Bạn đã hủy khóa học này rồi!");
+                        });
+                });
+            });
+            var message = '@TempData["Message"]';
+            if (message) {
+            alert(message);
+        }
+
+        });
+    </script>
+}

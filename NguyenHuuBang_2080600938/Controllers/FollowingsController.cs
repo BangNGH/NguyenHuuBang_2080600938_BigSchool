@@ -30,5 +30,21 @@ namespace NguyenHuuBang_2080600938.Controllers
             _dbContext.SaveChanges();
             return Ok();
         }
+        [HttpDelete]
+
+        public IHttpActionResult Unfollow(string id)
+        {
+            var userId = User.Identity.GetUserId();
+            var following = _dbContext.Followings.FirstOrDefault(f => f.FolloweeId == id && f.FollowerId == userId);
+            if (following == null)
+            {
+                return BadRequest("Error!");
+            }
+            _dbContext.Followings.Remove(following);
+            _dbContext.SaveChanges();
+            return Ok();
+        }
+
+
     }
 }

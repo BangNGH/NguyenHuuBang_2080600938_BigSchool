@@ -1,0 +1,37 @@
+﻿@model NguyenHuuBang_2080600938.ViewModels.LectureViewModel
+@{
+    ViewBag.Title = "LecturerFollowing";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Following Lecturers</h2>
+
+<ul class="user-list">
+    @foreach (var user in Model.Users)
+    {
+        <li>@user</li>
+    }
+</ul>
+
+<style>
+    .user-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .user-list li {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+            font-family: Arial, sans-serif;
+        }
+
+            .user-list li:before {
+                content: "➤";
+                margin-right: 10px;
+                color: #007bff;
+                font-size: 24px;
+            }
+</style>
+
